@@ -32,7 +32,7 @@ Plus one technical table, `Logs`, which has nothing to do with the business (see
  ┌────────▼────────┐    has many       ┌───▼───┐
  │  OrderLineItem  │◄──────────────────┤ Order │
  └────────┬────────┘                   └───┬───┘
-          │ copied into                    │ accepting it creates
+          │ copied into                    │ accepting it creates one
  ┌────────▼────────┐    has many      ┌────▼────┐
  │ InvoiceLineItem │◄─────────────────┤ Invoice │
  └─────────────────┘                  └─────────┘
@@ -123,6 +123,7 @@ For now the quantity is always 1: the cart holds each product only once.
 Created **automatically when an admin accepts an order**. Nobody creates an invoice by hand.
 
 - **It copies the order:** the customer, the total and all the lines. It keeps a link to its order.
+- **One order, at most one invoice (one-to-one):** a Pending or Rejected order has no invoice, and an Accepted order has exactly one. The database guarantees it too: `Invoices.OrderId` has a unique index, so a second invoice for the same order is refused.
 - **Invoice number:** `3/2026` style, unique, like the order number. The two numbers are counted separately: order `7/2026` can get invoice `3/2026`.
 - **All or nothing:** accepting an order makes two changes, the order's status and the new invoice. They're saved in **one transaction**, so either both happen or neither does. There's never an accepted order without an invoice, or an invoice for an order that is still pending.
 - **Status:**
@@ -136,7 +137,6 @@ Created **automatically when an admin accepts an order**. Nobody creates an invo
   ```
   **Only an invoice that is *Pending payment* can change.** *Paid* and *Canceled* are final.
 - **"Paid" is only a status** that the admin sets. Lamazon doesn't take payments; that would be a job for a payment provider.
-- The table allows several invoices per order (for example a corrected one, one day), but today every accepted order has exactly one.
 
 ### 📄 InvoiceLineItem: one line on the bill
 A copy of an order line (product, name, price, discount, quantity, total), linked back to the order line it came from and to the product. It's copied, not shared, for the same reason as the order lines: an invoice is a document, and it must never change after it's issued.
