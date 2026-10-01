@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Lamazon.Domain.Entities;
 
 public class Product : BaseEntity
