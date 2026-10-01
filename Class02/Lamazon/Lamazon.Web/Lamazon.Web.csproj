@@ -17,4 +17,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Lamazon.DataAccess\Lamazon.DataAccess.csproj" />
+    <ProjectReference Include="..\Lamazon.Services\Lamazon.Services.csproj" />
+    <ProjectReference Include="..\Lamazon.ViewModels\Lamazon.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

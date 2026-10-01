@@ -1,3 +1,4 @@
+using Lamazon.DataAccess.Extensions;
 using Lamazon.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,5 +26,15 @@ public class LamazonDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LamazonDbContext).Assembly);
+
+        modelBuilder
+            .SeedProductCategoryStatuses()
+            .SeedRoles()
+            .SeedProductStatuses()
+            .SeedProducts()
+            .SeedUsers()
+            .SeedProductCategories()
+            .SeedOrderStatuses()
+            .SeedInvoiceStatuses();
     }
 }

@@ -14,5 +14,5 @@ public class OrderLineItem : BaseEntity
     public int ProductId { get; set; }
     public Product Product { get; set; }
 
-    public ICollection<InvoiceLineItem> InvoiceLineItem { get; set; } = [];
+    public ICollection<InvoiceLineItem> InvoiceLineItems { get; set; } = [];
 }
