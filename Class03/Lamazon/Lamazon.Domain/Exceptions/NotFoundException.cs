@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Lamazon.Domain.Exceptions;
 
 public class NotFoundException : AppException

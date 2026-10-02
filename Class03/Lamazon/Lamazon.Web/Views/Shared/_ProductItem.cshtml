@@ -1,0 +1,23 @@
+@model ProductViewModel
+
+<div class="col-md-4">
+    <div class="product-container">
+        <img class="product-image" src="@Model.ImageUrl" alt="@Model.Name" />
+        <div class="product-content">
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id">
+                <p class="product-name" title="@Model.Name">@Model.Name</p>
+            </a>
+            <div class="d-flex justify-content-between align-items-baseline gap-2">
+                <p class="product-category">@Model.ProductCategoryName</p>
+                <partial name="_ProductPrice" model="Model" />
+            </div>
+            <hr />
+            <div class="product-description">
+                <p>@Model.Description</p>
+            </div>
+        </div>
+        <div class="product-actions">
+            <partial name="_CartButtons" model="Model" />
+        </div>
+    </div>
+</div>
