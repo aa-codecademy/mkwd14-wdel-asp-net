@@ -1,7 +1,9 @@
+using Lamazon.Domain.Entities;
 using Lamazon.Services.Abstractions;
 using Lamazon.Services.Implementations;
 using Mapster;
 using MapsterMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lamazon.Services;
@@ -14,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<IProductsService, ProductsService>();
         services.AddScoped<IProductCategoriesService, ProductCategoriesService>();
         services.AddScoped<IUsersService, UsersService>();
+
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
         // Mappers
         services.AddMappers();

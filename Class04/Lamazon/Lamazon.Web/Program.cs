@@ -19,6 +19,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// 404 and other error status codes without a body show the friendly error page too
 app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 
 app.UseHttpsRedirection();

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Mapster" />
     <PackageReference Include="Mapster.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" />
   </ItemGroup>
 
   <ItemGroup>

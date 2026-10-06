@@ -23,6 +23,9 @@ public class ProductsController : Controller
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
+        // IMPORTANT: Instead of using try-catch on every action, we are using an global ApplicationExceptionFilter to handle exceptions and redirect to the Error page.
+        // This keeps the code cleaner and more maintainable.
+
         //try
         //{
         ProductViewModel product = await _productsService.GetByIdAsync(id, cancellationToken);
