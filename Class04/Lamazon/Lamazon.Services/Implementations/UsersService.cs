@@ -25,7 +25,7 @@ public class UsersService : IUsersService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<UserViewModel> RegisterAsync(RegisterViewModel registerViewModel, CancellationToken cancellationToken)
+    public async Task<UserViewModel> RegisterAsync(RegisterUserViewModel registerViewModel, CancellationToken cancellationToken)
     {
         User user = _mapper.Map<User>(registerViewModel);
 

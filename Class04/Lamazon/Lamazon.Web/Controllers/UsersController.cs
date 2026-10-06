@@ -29,11 +29,11 @@ public class UsersController : Controller
 
     public IActionResult Register()
     {
-        return View(new RegisterViewModel());
+        return View(new RegisterUserViewModel());
     }
 
     [HttpPost]
-    public IActionResult Register(RegisterViewModel registerViewModel, CancellationToken cancellationToken)
+    public IActionResult Register(RegisterUserViewModel registerViewModel, CancellationToken cancellationToken)
     {
         // Register logic
 

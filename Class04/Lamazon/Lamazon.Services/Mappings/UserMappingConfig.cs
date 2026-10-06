@@ -10,7 +10,7 @@ public class UserMappingConfig : IRegister
     {
         config.NewConfig<User, UserViewModel>();
 
-        config.NewConfig<RegisterViewModel, User>()
+        config.NewConfig<RegisterUserViewModel, User>()
             .Ignore(dest => dest.Id)
             .Ignore(dest => dest.RoleKey)
             .Ignore(dest => dest.PasswordHash);

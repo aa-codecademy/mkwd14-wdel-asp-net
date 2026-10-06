@@ -2,8 +2,6 @@
 
 > 🛍️ The shop · class 4 of 10 · 🏠 [Course overview](../README.md) · ⬅️ [Class 03](../Class03/README.md) · 🗂️ [The domain](../Class01/domain.md) · 🗺️ [Database diagram](../Class01/Lamazon%20DB%20Diagram.png)
 
-First the **rest of class 3**: the products page, a product's details, the nested layout and a friendly **404 page**. Then **accounts**: register, log in and log out.
-
 ## 🗺️ What we do today
 
 1. 🔁 Recap
@@ -14,9 +12,8 @@ First the **rest of class 3**: the products page, a product's details, the neste
 6. 👤 `UsersRepository`, the user view models and `UserMappingConfig`
 7. 🧂 Password hashing with `IPasswordHasher<User>`
 8. ⚙️ `UsersService`: register, and check a login
-9. ✅ FluentValidation
-10. 🍪 Cookie authentication
-11. 🖥️ `UsersController`: Login, Register, Logout, `[Authorize]`, anti-forgery tokens
+
+⏭️ **Moved to class 5:** FluentValidation, cookie authentication, and `UsersController` with the Login, Register and Logout pages (`[Authorize]`, anti-forgery tokens, open redirects).
 
 ---
 
@@ -197,7 +194,7 @@ public class AppExceptionFilter : IExceptionFilter
 - 🔀 **A `switch` with one `case`?** In class 8, `BusinessRuleException` gets its own `case`.
 - 🐞 **Any other exception is a bug.** The filter doesn't touch it, and it goes on to the error page.
 
-**`AddWeb()`:** like `AddDataAccess()` and `AddServices()`, the Web layer gets its own registration method. Later today the cookie login goes in here too:
+**`AddWeb()`:** like `AddDataAccess()` and `AddServices()`, the Web layer gets its own registration method. In class 5 the cookie login goes in here too:
 ```csharp
 // Lamazon.Web/Extensions/ServiceCollectionExtensions.cs
 public static IServiceCollection AddWeb(this IServiceCollection services)
@@ -551,3 +548,17 @@ public class UsersService : IUsersService
 - 💉 Register it in `AddServices()`: `services.AddScoped<IUsersService, UsersService>();`
 
 ---
+
+## 🏠 Homework
+None this time. The login form's validator and the AccessDenied page need FluentValidation and the cookie login, so they're part of the class 5 homework.
+
+## ✅ By the end of the class
+- 🛍️ `/Products` shows all 6 products, and `/Products/Details/1` shows one
+- 🚫 `/Products/Details/999` and `/does-not-exist` show the "Page not found" page
+- 📄 `/Privacy` has no footer (the nested layout)
+- 👤 `UsersRepository`, `UserMappingConfig` and `UsersService` are registered, and the solution builds. No page uses them yet
+- 🚧 **Not finished yet:** `UsersController` has empty actions, and the Login and Register pages are unfinished. We finish them at the start of class 5
+
+---
+
+🔜 **Next class:** first the rest of class 4: FluentValidation, the cookie login, and the Login, Register and Logout pages. Then the cart: Add to cart and Remove from cart without reloading the page.
