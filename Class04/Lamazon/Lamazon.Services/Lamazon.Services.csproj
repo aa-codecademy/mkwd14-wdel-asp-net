@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="Mapster.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lamazon.DataAccess\Lamazon.DataAccess.csproj" />
+    <ProjectReference Include="..\Lamazon.Domain\Lamazon.Domain.csproj" />
+    <ProjectReference Include="..\Lamazon.ViewModels\Lamazon.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
