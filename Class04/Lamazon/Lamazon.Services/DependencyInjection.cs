@@ -13,6 +13,7 @@ public static class DependencyInjection
         // Services
         services.AddScoped<IProductsService, ProductsService>();
         services.AddScoped<IProductCategoriesService, ProductCategoriesService>();
+        services.AddScoped<IUsersService, UsersService>();
 
         // Mappers
         services.AddMappers();
