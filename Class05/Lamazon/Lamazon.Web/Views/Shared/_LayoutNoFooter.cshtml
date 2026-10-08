@@ -1,0 +1,14 @@
+@{
+    Layout = "_Layout";
+}
+
+@RenderBody();
+
+@* Left empty on purpose *@
+@section Footer {
+    
+}
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", false)
+}

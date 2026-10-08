@@ -1,0 +1,42 @@
+@{
+    var shoppingCartItemsCount = ViewBag.ShoppingCartItemsCount as int? ?? 0;
+}
+
+<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow navbar-fixed">
+    <div class="container">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+            <img src="~/images/lamazon.svg" class="navbar-logo" alt="Lamazon" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="mainNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav align-items-sm-center">
+                <li class="nav-item">
+                    <a class="nav-link notification-container" asp-area="" asp-controller="Orders" asp-action="ShoppingCart" title="Shopping cart">
+                        <i class="material-icons align-middle">shopping_cart</i>
+                        <span id="shoppingCartItemsCount" class="notification @(shoppingCartItemsCount > 0 ? "" : "hidden")">@shoppingCartItemsCount</span>
+                    </a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

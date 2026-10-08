@@ -1,0 +1,35 @@
+@model ProductViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="row">
+    <div class="col-12">
+        <a asp-controller="Products" asp-action="Index">&larr; Back to products</a>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-6">
+        <img class="product-details-image" src="@Model.ImageUrl" alt="@Model.Name" />
+    </div>
+
+    <div class="col-6">
+        <p class="product-details-name">@Model.Name</p>
+        <p class="product-details-category">Category: @Model.ProductCategoryName</p>
+        <div class="product-details-price">
+            <partial name="_ProductPrice" model="Model" />
+        </div>
+        <div class="product-details-actions mt-3">
+            <partial name="_CartButtons" model="Model" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <p class="product-details-description">@Model.Description</p>
+    </div>
+</div>
