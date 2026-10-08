@@ -1,5 +1,7 @@
+using System.Net;
 using Lamazon.Services.Abstractions;
 using Lamazon.ViewModels.Models;
+using Lamazon.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lamazon.Web.Controllers;
@@ -13,18 +15,36 @@ public class UsersController : Controller
         _usersService = usersService;
     }
 
+    // admin@lamazon.com
+    // Admin123!
     [HttpGet]
-    public IActionResult Login() // returnUrl
+    public IActionResult Login(string? returnUrl) 
     {
+        ViewData["ReturnUrl"] = returnUrl;
         return View(new UserCredentialsViewModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(UserCredentialsViewModel credentials, CancellationToken cancellationToken) // returnUrl
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(UserCredentialsViewModel credentials, string? returnUrl, CancellationToken cancellationToken)
     {
-        // Login logic
+        ViewData["ReturnUrl"] = returnUrl;
 
-        return null;
+        if (!ModelState.IsValid)
+        {
+            return View(credentials);
+        }
+
+        UserViewModel? user = await _usersService.ValidateCredentialsAsync(credentials, cancellationToken);
+        if (user is null)
+        {
+            ModelState.AddModelError("", "Invalid email or password.");
+            return View(credentials);
+        }
+
+        await AuthHelper.SignInUserAsync(HttpContext, user);
+
+        return Url.IsLocalUrl(returnUrl) ? LocalRedirect(returnUrl) : RedirectToAction("Index", "Home");
     }
 
     public IActionResult Register()
@@ -33,15 +53,24 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(RegisterUserViewModel registerViewModel, CancellationToken cancellationToken)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterUserViewModel registerUserViewModel, CancellationToken cancellationToken)
     {
-        // Register logic
+        if (!ModelState.IsValid)
+        {
+            return View(registerUserViewModel);
+        }
 
-        return null;
+        var user = await _usersService.RegisterAsync(registerUserViewModel, cancellationToken);
+
+        await AuthHelper.SignInUserAsync(HttpContext, user);
+
+        return RedirectToAction("Index", "Home");
     }
 
     public async Task<IActionResult> Logout()
     {
-        return null;
+        await AuthHelper.SignOutUserAsync(HttpContext);
+        return RedirectToAction("Index", "Home");
     }
 }

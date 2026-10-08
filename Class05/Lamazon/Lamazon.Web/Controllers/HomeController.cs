@@ -1,6 +1,7 @@
 using Lamazon.Services.Abstractions;
 using Lamazon.ViewModels.Models;
 using Lamazon.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -21,6 +22,7 @@ public class HomeController : Controller
         return View(featuredProducts);
     }
 
+    [Authorize]
     public IActionResult Privacy()
     {
         return View();

@@ -2,3 +2,57 @@
 @{
     ViewData["Title"] = "Register";
 }
+
+<div class="mt-5">
+    <form asp-controller="Users" asp-action="Register" method="post">
+        <div class="row centered-content">
+            <div class="col-md-4">
+                <h4 class="login-title">Create your account</h4>
+            </div>
+        </div>
+
+        <div class="row centered-content">
+            <div class="col-md-4 mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" autocomplete="name" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row centered-content">
+            <div class="col-md-4 mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" type="email" autocomplete="username" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row centered-content">
+            <div class="col-md-4 mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row centered-content">
+            <div class="col-md-4 mb-3">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row centered-content">
+            <div class="col-md-4 text-end">
+                <button type="submit" class="btn btn-success">Register</button>
+            </div>
+        </div>
+
+        <div class="row centered-content">
+            <div class="col-md-4 mt-2 text-center">
+                Already have an account? <a asp-controller="Users" asp-action="Login">Log in</a>.
+            </div>
+        </div>
+    </form>
+</div>

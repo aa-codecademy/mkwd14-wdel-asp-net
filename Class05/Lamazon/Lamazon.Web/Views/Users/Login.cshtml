@@ -4,23 +4,40 @@
 }
 
 <div class="mt-5">
-    <form>
+    <form asp-controller="Users" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" >
         <div class="row centered-content">
             <div class="col-4">
                 <h4 class="login-title">Please log in</h4>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             </div>
         </div>
 
         <div class="row centered-content">
+            <div class="col-4 mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" type="email" autocomplete="username"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
         </div>
 
         <div class="row centered-content">
+            <div class="col-4 mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" type="password" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
         </div>
 
         <div class="row centered-content">
+            <div class="col-4 text-end">
+                <button class="btn btn-success">Login</button>
+            </div>
         </div>
 
         <div class="row centered-content">
+            <div class="col-4 mt-2 text-center">
+                Don't have an account? <a asp-controller="Users" asp-action="Register">Register here</a>.
+            </div>
         </div>
     </form>
 </div>
