@@ -1,3 +1,4 @@
+using FluentValidation;
 using Lamazon.Domain.Entities;
 using Lamazon.Services.Abstractions;
 using Lamazon.Services.Implementations;
@@ -22,6 +23,9 @@ public static class DependencyInjection
         // Mappers
         services.AddMappers();
 
+        // Validators
+        services.AddValidators();
+
         return services;
     }
 
@@ -37,5 +41,12 @@ public static class DependencyInjection
 
         services.AddSingleton(config);
         services.AddScoped<IMapper, ServiceMapper>();
+    }
+
+    private static void AddValidators(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
+        ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
     }
 }
