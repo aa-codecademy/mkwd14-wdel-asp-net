@@ -16,6 +16,7 @@ public class ProductsController : BaseController
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         List<ProductViewModel> products = await _productsService.GetAllAsync(cancellationToken);
+        MarkProductsInCart(products);
 
         return View(products);
     }
@@ -28,6 +29,7 @@ public class ProductsController : BaseController
         //try
         //{
         ProductViewModel product = await _productsService.GetByIdAsync(id, cancellationToken);
+        MarkProductsInCart([product]);
 
         return View(product);
         //}
@@ -36,4 +38,33 @@ public class ProductsController : BaseController
         //    return RedirectToAction("Error", controllerName: "Home");
         //}
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddToCart(int productId, CancellationToken cancellationToken)
+    {
+        _ = await _productsService.GetByIdAsync(productId, cancellationToken);
+
+        var shoppingCart = GetShoppingCart();
+
+        if (!shoppingCart.Items.Any(item => item.ProductId == productId))
+        {
+            shoppingCart.Items.Add(new() { ProductId = productId });
+            SaveShoppingCart(shoppingCart);
+        }
+
+        return Json(new { itemsCount = shoppingCart.Items.Count });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult RemoveFromCart(int productId)
+    {
+        var shoppingCart = GetShoppingCart();
+        shoppingCart.Items.RemoveAll(item => item.ProductId == productId);
+        SaveShoppingCart(shoppingCart);
+
+        return Json(new { itemsCount = shoppingCart.Items.Count });
+    }
+
 }

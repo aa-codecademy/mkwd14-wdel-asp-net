@@ -20,6 +20,7 @@ public class HomeController : BaseController
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         List<ProductViewModel> featuredProducts = await _productsService.GetFeaturedAsync(cancellationToken);
+        MarkProductsInCart(featuredProducts);
         return View(featuredProducts);
     }
 
