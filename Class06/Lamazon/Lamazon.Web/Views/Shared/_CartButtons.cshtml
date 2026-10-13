@@ -1,0 +1,10 @@
+@model ProductViewModel
+
+<button type="button" class="btn btn-remove-from-cart btn-danger @(Model.IsAddedToCart ? "" : "hidden")"
+        data-product-id="@Model.Id">
+    Remove from cart
+</button>
+<button type="button" class="btn btn-add-to-cart btn-success @(Model.IsAddedToCart ? "hidden" : "")"
+        data-product-id="@Model.Id">
+    Add to cart
+</button>

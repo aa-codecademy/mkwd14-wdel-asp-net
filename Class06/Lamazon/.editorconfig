@@ -1,0 +1,131 @@
+# Code style for the whole Lamazon solution.
+# Visual Studio, VS Code (C# Dev Kit) and Rider read this file automatically,
+# and `dotnet format` / the build (EnforceCodeStyleInBuild) enforce it.
+#
+# Severity levels:  none | silent | suggestion (grey dots) | warning (green squiggle + build warning) | error
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,xml,csproj,props,targets,slnx,config,http}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+# EF Core migrations are generated code: analyzers leave them alone
+[**/Migrations/*.cs]
+generated_code = true
+
+[*.cs]
+
+# --- Usings -----------------------------------------------------------------
+# `using System...` first, all usings outside the namespace, no unused usings
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+csharp_using_directive_placement = outside_namespace:warning
+dotnet_diagnostic.IDE0005.severity = warning
+
+# --- Namespaces -------------------------------------------------------------
+# `namespace Lamazon.Domain.Entities;` (file-scoped) saves one level of indentation
+csharp_style_namespace_declarations = file_scoped:warning
+dotnet_diagnostic.IDE0161.severity = warning
+
+# --- Braces -----------------------------------------------------------------
+# Always use { } after if/else/for/foreach/while, even for one line
+csharp_prefer_braces = true:warning
+dotnet_diagnostic.IDE0011.severity = warning
+
+# --- var --------------------------------------------------------------------
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+
+# --- Accessibility modifiers ------------------------------------------------
+# Always write `public`, `private`, ... explicitly
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+dotnet_diagnostic.IDE0040.severity = warning
+
+# --- Readonly fields --------------------------------------------------------
+dotnet_style_readonly_field = true:warning
+dotnet_diagnostic.IDE0044.severity = warning
+
+# --- Constructors -----------------------------------------------------------
+# Classic constructors instead of C# 12 primary constructors:
+# for Dependency Injection they show more clearly what a class receives and stores.
+csharp_style_prefer_primary_constructors = false:silent
+dotnet_diagnostic.IDE0290.severity = none
+
+# --- Expression-bodied members (allowed, not required) ----------------------
+csharp_style_expression_bodied_methods = when_on_single_line:silent
+csharp_style_expression_bodied_properties = true:silent
+csharp_style_expression_bodied_accessors = true:silent
+
+# --- Formatting -------------------------------------------------------------
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+
+# Interfaces start with I:  IProductsService
+dotnet_naming_rule.interfaces_start_with_i.severity = warning
+dotnet_naming_rule.interfaces_start_with_i.symbols = interface_symbols
+dotnet_naming_rule.interfaces_start_with_i.style = prefix_i_pascal_case
+dotnet_naming_symbols.interface_symbols.applicable_kinds = interface
+dotnet_naming_symbols.interface_symbols.applicable_accessibilities = *
+dotnet_naming_style.prefix_i_pascal_case.required_prefix = I
+dotnet_naming_style.prefix_i_pascal_case.capitalization = pascal_case
+
+# Types and members are PascalCase:  ProductsService, GetByIdAsync, TotalAmount
+dotnet_naming_rule.types_and_members_pascal_case.severity = warning
+dotnet_naming_rule.types_and_members_pascal_case.symbols = types_and_members
+dotnet_naming_rule.types_and_members_pascal_case.style = pascal_case
+dotnet_naming_symbols.types_and_members.applicable_kinds = class, struct, enum, delegate, method, property, event, namespace
+dotnet_naming_symbols.types_and_members.applicable_accessibilities = *
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# Constants are PascalCase:  public const string Admin = "Admin";
+dotnet_naming_rule.constants_pascal_case.severity = warning
+dotnet_naming_rule.constants_pascal_case.symbols = constant_fields
+dotnet_naming_rule.constants_pascal_case.style = pascal_case
+dotnet_naming_symbols.constant_fields.applicable_kinds = field
+dotnet_naming_symbols.constant_fields.applicable_accessibilities = *
+dotnet_naming_symbols.constant_fields.required_modifiers = const
+
+# Private fields are _camelCase:  private readonly IProductsService _productsService;
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel_case
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+
+# Parameters and local variables are camelCase:  int productId
+dotnet_naming_rule.parameters_camel_case.severity = warning
+dotnet_naming_rule.parameters_camel_case.symbols = parameters_and_locals
+dotnet_naming_rule.parameters_camel_case.style = camel_case
+dotnet_naming_symbols.parameters_and_locals.applicable_kinds = parameter, local
+dotnet_naming_style.camel_case.capitalization = camel_case
+
+# High-performance logging (LoggerMessage delegates, avoiding "expensive" log arguments): too advanced for this course
+dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA1873.severity = none
+# "Make public types internal": controllers MUST be public for ASP.NET Core to find them
+dotnet_diagnostic.CA1515.severity = none
+# ConfigureAwait(false) is not needed in ASP.NET Core apps
+dotnet_diagnostic.CA2007.severity = none
+# Names that are keywords in OTHER .NET languages (e.g. "Shared" in VB.NET): irrelevant for a C#-only app
+dotnet_diagnostic.CA1716.severity = none
+# "Don't end a type name in Enum": OrderStatus is already the name of the lookup-table entity,
+# so its enum is OrderStatusEnum (the same for ProductStatus, ProductCategoryStatus and InvoiceStatus)
+dotnet_diagnostic.CA1711.severity = none

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] is string title ? $"{title} - Lamazon" : "Lamazon")</title>
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+@*
+    "Sticky footer" with flexbox (Bootstrap utility classes):
+    - body: d-flex flex-column min-vh-100 = the children are stacked vertically, and the body is at least as tall as the window
+    - the content container: flex-grow-1 = takes all the free height, so the footer is pushed to the bottom
+      (short page: at the bottom of the window; long page: after the content, as usual)
+*@
+<body class="d-flex flex-column min-vh-100">
+    @* One anti-forgery token for the AJAX calls in site.js (forms get their own automatically) *@
+    @Html.AntiForgeryToken()
+
+    <header>
+        <partial name="_Navbar" />
+    </header>
+
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @* A page (or a nested layout like _LayoutNoFooter) can replace the footer with its own "Footer" section *@
+    @if (IsSectionDefined("Footer"))
+    {
+        @RenderSection("Footer")
+    }
+    else
+    {
+        <partial name="_Footer" />
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @* <script src="~/lib/bootstrap-notify/bootstrap-notify.min.js"></script> *@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    @* <partial name="_Notification" /> *@
+</body>
+</html>
