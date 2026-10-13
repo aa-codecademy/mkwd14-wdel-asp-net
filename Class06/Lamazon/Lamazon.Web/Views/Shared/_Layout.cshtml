@@ -7,6 +7,7 @@
     <link rel="icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/notyf/notyf.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 @*
@@ -41,10 +42,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    @* <script src="~/lib/bootstrap-notify/bootstrap-notify.min.js"></script> *@
+    <script src="~/lib/notyf/notyf.min.js"></script>
+    <partial name="_Notification" />
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    @* <partial name="_Notification" /> *@
 </body>
 </html>

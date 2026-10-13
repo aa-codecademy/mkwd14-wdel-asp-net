@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lamazon.Web.Controllers;
 
-public class UsersController : Controller
+public class UsersController : BaseController
 {
     private readonly IUsersService _usersService;
     private readonly IValidator<UserCredentialsViewModel> _credentialsValidator;
@@ -31,6 +31,8 @@ public class UsersController : Controller
     [HttpGet]
     public IActionResult Login(string? returnUrl) 
     {
+        //TempData[Notifications.MessageKey] = "Welcome to Login!";
+        //TempData[Notifications.TypeKey] = "error";
         ViewData["ReturnUrl"] = returnUrl;
         return View(new UserCredentialsViewModel());
     }
@@ -61,6 +63,8 @@ public class UsersController : Controller
         }
 
         await AuthHelper.SignInUserAsync(HttpContext, user);
+
+        AddSuccessNotification($"Welcome to Lamazon, {user.FullName}!");
 
         // Check if the returnUrl is a local URL to prevent open redirect vulnerabilities.
         return Url.IsLocalUrl(returnUrl) ? LocalRedirect(returnUrl) : RedirectToAction("Index", "Home");

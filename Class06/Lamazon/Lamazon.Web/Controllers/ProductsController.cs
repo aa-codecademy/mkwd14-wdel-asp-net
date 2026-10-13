@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lamazon.Web.Controllers;
 
-public class ProductsController : Controller
+public class ProductsController : BaseController
 {
     private readonly IProductsService _productsService;
 
