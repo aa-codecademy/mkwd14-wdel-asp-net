@@ -31,7 +31,7 @@ public static class DependencyInjection
                 options.SlidingExpiration = true; // every visit extends the hour
                 options.Cookie.Name = Cookies.Auth;
                 options.Cookie.HttpOnly = true; // JavaScript can't read it
-                options.Cookie.SameSite = SameSiteMode.Lax; 
+                options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
         services.AddAuthorization();

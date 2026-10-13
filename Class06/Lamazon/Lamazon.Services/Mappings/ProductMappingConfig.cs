@@ -9,6 +9,6 @@ public class ProductMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<Product, ProductViewModel>();
-            //.Map(dest => dest.ProductCategoryName, src => src.ProductCategory.Name);
+        //.Map(dest => dest.ProductCategoryName, src => src.ProductCategory.Name);
     }
 }

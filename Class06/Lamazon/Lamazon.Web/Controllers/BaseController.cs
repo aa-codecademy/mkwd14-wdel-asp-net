@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Lamazon.Web.Controllers;
 
+/// <summary>
+/// Base controller that provides common functionality for all controllers in the application, such as shopping cart management and notification handling.
+/// </summary>
 public abstract class BaseController : Controller
 {
+    /// <summary>
+    /// Called every time before the action method is executed. 
+    /// </summary>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         base.OnActionExecuting(context);
@@ -19,6 +25,9 @@ public abstract class BaseController : Controller
 
     #region Shopping Cart
 
+    /// <summary>
+    /// Retrieves the shopping cart from the cookies. 
+    /// </summary>
     protected ShoppingCartViewModel GetShoppingCart()
     {
         string? cookieValue = Request.Cookies[Cookies.ShoppingCart];
@@ -38,6 +47,9 @@ public abstract class BaseController : Controller
         }
     }
 
+    /// <summary>
+    /// Saves the shopping cart to the cookies.
+    /// </summary>
     protected void SaveShoppingCart(ShoppingCartViewModel shoppingCart)
     {
         if (shoppingCart.Items.Count == 0)
@@ -59,6 +71,9 @@ public abstract class BaseController : Controller
         Response.Cookies.Append(Cookies.ShoppingCart, shoppingCartJson, cookieOptions);
     }
 
+    /// <summary>
+    /// Marks the products that are already in the shopping cart by setting the IsAddedToCart property to true for those products.
+    /// </summary>
     protected void MarkProductsInCart(IEnumerable<ProductViewModel> products)
     {
         var shoppingCart = GetShoppingCart();
@@ -74,6 +89,8 @@ public abstract class BaseController : Controller
 
 
     #region Notifications
+
+    // Used to add success and error notifications to the TempData, which can be displayed in the views using the JS library 'notyf'
 
     protected void AddSuccessNotification(string message)
     {

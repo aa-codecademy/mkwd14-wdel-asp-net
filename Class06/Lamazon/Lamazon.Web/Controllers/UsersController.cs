@@ -1,4 +1,3 @@
-using System.Net;
 using FluentValidation;
 using FluentValidation.Results;
 using Lamazon.Services.Abstractions;
@@ -29,7 +28,7 @@ public class UsersController : BaseController
     // admin@lamazon.com
     // Admin123!
     [HttpGet]
-    public IActionResult Login(string? returnUrl) 
+    public IActionResult Login(string? returnUrl)
     {
         //TempData[Notifications.MessageKey] = "Welcome to Login!";
         //TempData[Notifications.TypeKey] = "error";

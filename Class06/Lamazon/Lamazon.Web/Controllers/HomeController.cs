@@ -1,10 +1,9 @@
+using System.Diagnostics;
 using Lamazon.Services.Abstractions;
 using Lamazon.ViewModels.Models;
-using Lamazon.Web.Helpers;
 using Lamazon.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace Lamazon.Web.Controllers;
 

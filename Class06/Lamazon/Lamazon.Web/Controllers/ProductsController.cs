@@ -39,6 +39,7 @@ public class ProductsController : BaseController
         //}
     }
 
+    // Called with AJAX from site.js. It answers with JSON, not with a view.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddToCart(int productId, CancellationToken cancellationToken)
