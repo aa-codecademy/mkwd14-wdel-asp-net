@@ -7,4 +7,5 @@ public interface IProductsRepository : IRepository<Product>
     Task<List<Product>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<List<Product>> GetFeaturedAsync(CancellationToken cancellationToken = default);
     Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<List<Product>> GetByIdsAsync(IReadOnlyCollection<int> ids, CancellationToken cancellationToken = default);
 }

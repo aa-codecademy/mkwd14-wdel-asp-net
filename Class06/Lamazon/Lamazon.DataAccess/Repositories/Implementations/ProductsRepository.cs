@@ -31,6 +31,16 @@ public class ProductsRepository : BaseRepository<Product>, IProductsRepository
             .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
     }
 
+    public async Task<List<Product>> GetByIdsAsync(
+        IReadOnlyCollection<int> ids,
+        CancellationToken cancellationToken = default)
+    {
+        return await ActiveProducts
+            .AsNoTracking()
+            .Where(product => ids.Contains(product.Id))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<List<Product>> GetFeaturedAsync(CancellationToken cancellationToken = default)
     {
         return await ActiveProducts

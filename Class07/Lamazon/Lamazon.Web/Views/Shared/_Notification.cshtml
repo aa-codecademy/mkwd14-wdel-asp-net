@@ -1,0 +1,19 @@
+@using Lamazon.Web.Helpers
+
+@{
+    var message = TempData[Notifications.MessageKey] as string;
+    var type = TempData[Notifications.TypeKey] as string ?? "success";
+}
+
+<script>
+    // At the top right (the default is the bottom right), for 5 seconds instead of 2, with an × to close it sooner
+    console.log("Hello from _Notification.cshtml");
+    const notyf = new Notyf({ duration: 5000, dismissible: true, position: { x: 'right', y: 'top' } });
+</script>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <script>
+        notyf.open({ type: @Json.Serialize(type), message: @Json.Serialize(Html.Encode(message)) });
+    </script>
+}

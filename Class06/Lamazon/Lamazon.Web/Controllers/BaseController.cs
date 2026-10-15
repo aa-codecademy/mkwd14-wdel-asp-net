@@ -47,6 +47,13 @@ public abstract class BaseController : Controller
         }
     }
 
+    protected IReadOnlyList<int> GetShoppingCartProductIds()
+    {
+        var shoppingCart = GetShoppingCart();
+        var productIds = shoppingCart.Items.Select(i => i.ProductId).ToList();
+        return productIds;
+    }
+
     /// <summary>
     /// Saves the shopping cart to the cookies.
     /// </summary>
