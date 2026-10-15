@@ -36,6 +36,8 @@ public static class DependencyInjection
 
         services.AddAuthorization();
 
+        services.AddHttpClient();
+
         return services;
     }
 }

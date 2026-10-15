@@ -1,6 +1,7 @@
 using Lamazon.DataAccess;
 using Lamazon.Services;
 using Lamazon.Web.Extensions;
+using Lamazon.Web.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +19,25 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+else
+{
+    app.UseMiddleware<DebugIpAddressMiddleware>();
+}
+
+// The order of middleware is important !
+// Client => Http Request => Middleware Pipeline (UseHttpsRedirection, UseRouting, UseAuthentication, UseAuthorization, etc...) => Controller => Action (Endpoint)
 
 // 404 and other error status codes without a body show the friendly error page too
 app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.Use((context, next) =>
+{
+    context.Items["ThisIsTest"] = "Hello from middleware!";
+    return next();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -36,4 +50,4 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 
-app.Run();
+await app.RunAsync();

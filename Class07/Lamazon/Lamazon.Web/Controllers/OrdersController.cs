@@ -1,10 +1,12 @@
 using Lamazon.Services.Abstractions;
 using Lamazon.ViewModels.Models;
 using Lamazon.Web.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lamazon.Web.Controllers;
 
+[Authorize]
 public class OrdersController : BaseController
 {
     private readonly IOrdersService _ordersService;
@@ -40,9 +42,9 @@ public class OrdersController : BaseController
     public async Task<IActionResult> CreateOrder(CancellationToken cancellationToken)
     {
         var productIds = GetShoppingCartProductIds();
-        // ipAddress
+        string? ipAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
 
-        var orderNumber = await _ordersService.CreateAsync(User.GetUserId(), productIds, cancellationToken);
+        var orderNumber = await _ordersService.CreateAsync(User.GetUserId(), productIds, ipAddress, cancellationToken);
         SaveShoppingCart(new ShoppingCartViewModel());
         AddSuccessNotification($"Order {orderNumber} was created. Thank you!");
 

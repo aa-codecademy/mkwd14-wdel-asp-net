@@ -1,6 +1,7 @@
 using Lamazon.DataAccess.Repositories.Abstractions;
 using Lamazon.Domain.Entities;
 using Lamazon.Domain.Enums;
+using Lamazon.Domain.Exceptions;
 using Lamazon.Services.Abstractions;
 using Lamazon.ViewModels.Models;
 using MapsterMapper;
@@ -12,15 +13,18 @@ public class OrdersService : IOrdersService
     private readonly IOrdersRepository _ordersRepository;
     private readonly IProductsRepository _productsRepository;
     private readonly IMapper _mapper;
+    private readonly IGeoTrackerService _geoTrackerService;
 
     public OrdersService(
         IOrdersRepository ordersRepository,
         IProductsRepository productsRepository,
-        IMapper mapper)
+        IMapper mapper,
+        IGeoTrackerService geoTrackerService)
     {
         _ordersRepository = ordersRepository;
         _productsRepository = productsRepository;
         _mapper = mapper;
+        _geoTrackerService = geoTrackerService;
     }
 
     public async Task<List<OrderLineItemViewModel>> GetCartLineItemsAsync(
@@ -46,12 +50,13 @@ public class OrdersService : IOrdersService
     public async Task<string> CreateAsync(
         int userId,
         IReadOnlyCollection<int> productIds,
+        string? ipAddress,
         CancellationToken cancellationToken)
     {
         var products = await _productsRepository.GetByIdsAsync(productIds, cancellationToken);
         if (products.Count == 0)
         {
-            throw new Exception();
+            throw new BusinessRuleException("Your shopping cart is empty.");
         }
 
         var lineItems = products.Select(CreateLineItem).ToList();
@@ -61,8 +66,8 @@ public class OrdersService : IOrdersService
             OrderDate = DateTime.UtcNow,
             OrderStatusId = (int)OrderStatusEnum.Pending,
             OrderLineItems = lineItems,
-            TotalAmount = lineItems.Sum(item => item.TotalPrice)
-            // IpAddress
+            TotalAmount = lineItems.Sum(item => item.TotalPrice),
+            IpAddress = ipAddress,
         };
 
         var maxId = await _ordersRepository.GetMaxIdAsync(cancellationToken);
@@ -71,9 +76,27 @@ public class OrdersService : IOrdersService
 
         order.OrderNumber = orderNumber;
 
+        await AddLocationAsync(order, cancellationToken);
+
         await _ordersRepository.AddAsync(order, cancellationToken);
 
         return orderNumber;
+    }
+
+    private async Task AddLocationAsync(Order order, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(order.IpAddress))
+        {
+            return;
+        }
+
+        var ipGeoInfo = await _geoTrackerService.GetIpGeoInfoAsync(order.IpAddress, cancellationToken);
+
+        if (ipGeoInfo is not null && !string.IsNullOrEmpty(ipGeoInfo.CountryCode))
+        {
+            order.CountryCode = ipGeoInfo.CountryCode;
+            order.CountryFlagUrl = _geoTrackerService.GetCountryFlagUrl(ipGeoInfo.CountryCode);
+        }
     }
 
     private OrderLineItem CreateLineItem(Product product)

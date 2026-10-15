@@ -6,6 +6,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 
 namespace Lamazon.Services;
 
@@ -20,6 +21,8 @@ public static class DependencyInjection
         services.AddScoped<IOrdersService, OrdersService>();
 
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+        services.AddGeoTrackerService();
 
         // Mappers
         services.AddMappers();
@@ -50,4 +53,15 @@ public static class DependencyInjection
 
         ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
     }
+
+    private static void AddGeoTrackerService(this IServiceCollection services)
+    {
+        services.AddScoped<IGeoTrackerService, GeoTrackerService>();
+
+        services.AddHttpClient<IGeoTrackerService, GeoTrackerService>(client =>
+        {
+            client.BaseAddress = new Uri("http://ip-api.com/");
+        });
+    }
+
 }
