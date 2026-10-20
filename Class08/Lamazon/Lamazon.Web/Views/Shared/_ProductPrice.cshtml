@@ -1,0 +1,10 @@
+@model ProductViewModel
+
+@if (Model.DiscountPercentage > 0)
+{
+    <p class="product-price"><del>$@Model.Price.ToString("N2")</del> $@Model.DiscountedPrice.ToString("N2")</p>
+}
+else
+{
+    <p class="product-price">$@Model.Price.ToString("N2")</p>
+}
