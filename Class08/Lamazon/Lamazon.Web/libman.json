@@ -29,6 +29,19 @@
         "notyf.min.js",
         "notyf.min.css"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "material-dashboard@2.1.0",
+      "destination": "wwwroot/lib/material-dashboard/",
+      "files": [
+        "assets/css/material-dashboard.min.css",
+        "assets/js/material-dashboard.min.js",
+        "assets/js/plugins/perfect-scrollbar.jquery.min.js",
+        "assets/js/core/popper.min.js",
+        "assets/js/core/bootstrap-material-design.min.js",
+        "LICENSE.md"
+      ]
     }
   ]
 }

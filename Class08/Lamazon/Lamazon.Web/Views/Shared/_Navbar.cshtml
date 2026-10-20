@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             @if (User.IsAdmin())
                             {
-                                <li><a class="dropdown-item">Lamazon CMS</a></li>
+                                <li><a asp-area="Administration" asp-controller="Home" asp-action="Index" class="dropdown-item">Lamazon CMS</a></li>
                             }
                             <li>
                                 @* Logout is a POST (with an anti-forgery token), so another site can't log you out with a link *@
