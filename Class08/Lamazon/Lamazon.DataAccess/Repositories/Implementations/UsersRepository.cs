@@ -1,5 +1,6 @@
 using Lamazon.DataAccess.Context;
 using Lamazon.DataAccess.Repositories.Abstractions;
+using Lamazon.Domain.Constants;
 using Lamazon.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,5 +29,14 @@ public class UsersRepository : BaseRepository<User>, IUsersRepository
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken)
     {
         return await Table.AnyAsync(user => user.Email == email, cancellationToken);
+    }
+
+    public async Task<List<User>> GetAdministratorsAsync(CancellationToken cancellationToken = default)
+    {
+        return await Table
+            .AsNoTracking()
+            .Where(user => user.RoleKey == Roles.Admin)
+            .OrderBy(user => user.FullName)
+            .ToListAsync(cancellationToken);
     }
 }

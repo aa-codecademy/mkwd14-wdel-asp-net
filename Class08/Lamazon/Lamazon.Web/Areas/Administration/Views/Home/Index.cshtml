@@ -1,1 +1,108 @@
-<h1>Welcome to Admin Dashboard</h1>
+@model DashboardViewModel
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-primary card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">person</i>
+                    </div>
+                    <p class="card-category">Customers</p>
+                    <h3 class="card-title">@Model.TotalCustomers</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">inventory</i>
+                    </div>
+                    <p class="card-category">Products</p>
+                    <h3 class="card-title">@Model.TotalActiveProducts</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">Deleted: @Model.TotalDeletedProducts</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">receipt</i>
+                    </div>
+                    <p class="card-category">Invoices</p>
+                    <h3 class="card-title">@Model.TotalInvoices <small>($@Model.TotalInvoicesAmount.ToString("N2") paid)</small></h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        Pending: @Model.TotalPendingInvoices &middot;
+                        Paid: @Model.TotalPaidInvoices &middot;
+                        Canceled: @Model.TotalCanceledInvoices
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">description</i>
+                    </div>
+                    <p class="card-category">Orders</p>
+                    <h3 class="card-title">@Model.TotalOrders <small>($@Model.TotalOrdersAmount.ToString("N2") accepted)</small></h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        Pending: @Model.TotalPendingOrders &middot;
+                        Accepted: @Model.TotalAcceptedOrders &middot;
+                        Rejected: @Model.TotalRejectedOrders
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-warning">
+                    <h4 class="card-title">Platform administrators</h4>
+                    <p class="card-category">Everyone who can open this CMS</p>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover">
+                        <thead class="text-warning">
+                            <tr>
+                                <th>ID</th>
+                                <th>Full name</th>
+                                <th>Email</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var admin in Model.Administrators)
+                            {
+                                <tr>
+                                    <td>@admin.Id</td>
+                                    <td>@admin.FullName</td>
+                                    <td>@admin.Email</td>
+                                    <td class="column-actions">
+                                        <a class="action-button text-warning" asp-controller="Users" asp-action="Edit" asp-route-id="@admin.Id">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,4 +7,5 @@ public interface IUsersService
     Task<UserViewModel> RegisterAsync(RegisterUserViewModel registerViewModel, CancellationToken cancellationToken);
     Task<UserViewModel?> ValidateCredentialsAsync(UserCredentialsViewModel userCredentials, CancellationToken cancellationToken);
     Task<UserViewModel> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<List<UserViewModel>> GetAdministratorsAsync(CancellationToken cancellationToken = default);
 }

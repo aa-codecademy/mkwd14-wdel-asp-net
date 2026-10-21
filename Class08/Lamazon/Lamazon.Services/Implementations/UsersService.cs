@@ -72,4 +72,11 @@ public class UsersService : IUsersService
 
         return _mapper.Map<UserViewModel>(user);
     }
+
+    public async Task<List<UserViewModel>> GetAdministratorsAsync(CancellationToken cancellationToken = default)
+    {
+        var administrators = await _usersRepository.GetAdministratorsAsync(cancellationToken);
+        return _mapper.Map<List<UserViewModel>>(administrators);
+    }
+
 }
