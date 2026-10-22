@@ -1,0 +1,90 @@
+@model OrderViewModel
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Order @Model.OrderNumber</h4>
+        <p class="card-category">@Model.OrderStatusName</p>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group bmd-form-group is-filled">
+                    <label asp-for="OrderNumber" class="bmd-label-floating"></label>
+                    <input asp-for="OrderNumber" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group bmd-form-group is-filled">
+                    <label asp-for="OrderDate" class="bmd-label-floating"></label>
+                    <input value="@Model.OrderDate.ToString("dd.MM.yyyy HH:mm")" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group bmd-form-group is-filled">
+                    <label class="bmd-label-floating">Customer</label>
+                    <input value="@Model.User?.FullName" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group bmd-form-group is-filled">
+                    <label class="bmd-label-floating">Email</label>
+                    <input value="@Model.User?.Email" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group bmd-form-group is-filled">
+                    <label asp-for="TotalAmount" class="bmd-label-floating"></label>
+                    <input value="$@Model.TotalAmount.ToString("N2")" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group bmd-form-group is-filled">
+                    <label asp-for="CountryCode" class="bmd-label-floating"></label>
+                    <input value="@(Model.CountryCode ?? "unknown") (@(Model.IpAddress ?? "no IP address"))" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-striped table-hover preview-table mt-5">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Product name</th>
+                    <th class="text-right">Product price</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-right">Total price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.OrderLineItems.Count; i++)
+                {
+                    var lineItem = Model.OrderLineItems[i];
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@lineItem.ProductName</td>
+                        <td class="text-right">$@lineItem.ProductPrice.ToString("N2")</td>
+                        <td class="text-center">@lineItem.Quantity</td>
+                        <td class="text-right">$@lineItem.TotalPrice.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer justify-content-end">
+        <a class="btn btn-default" asp-action="Index">Back</a>
+        @* Only a pending order can be accepted or rejected (the service checks it too) *@
+        @if (Model.OrderStatus == OrderStatusEnum.Pending)
+        {
+            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#rejectModal">Reject</button>
+            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#acceptModal">Accept</button>
+        }
+    </div>
+</div>
+
+@* TODO: Accept/Reject Confirmation Modal *@

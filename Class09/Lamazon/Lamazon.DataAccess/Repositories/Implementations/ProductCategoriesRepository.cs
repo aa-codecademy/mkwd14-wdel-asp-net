@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Lamazon.DataAccess.Context;
+using Lamazon.DataAccess.Extensions;
 using Lamazon.DataAccess.Repositories.Abstractions;
 using Lamazon.Domain.Entities;
 using Lamazon.Domain.Enums;
@@ -50,28 +51,41 @@ public class ProductCategoriesRepository : BaseRepository<ProductCategory>, IPro
             categories = categories.Where(category => category.Name.Contains(searchValue));
         }
 
-        // Sorting/Filtering
-        var keySelector = query.SortColumn is not null && _sortableColumns.TryGetValue(query.SortColumn, out var selector) ? selector : category => category.Id;
+        return await categories
+            .SortBy(query.SortColumn, query.IsAscending, _sortableColumns, category => category.Id)
+            .ToPagedResultAsync(totalRecords, query.Start, query.Length, cancellationToken);
 
-        categories = query.IsAscending ? categories.OrderBy(keySelector) : categories.OrderByDescending(keySelector);
+        /*  WITHOUT EXTENSION METHODS
 
-        // Paged Result Model
-        var totalDisplayRecords = await categories.CountAsync(cancellationToken);
+            //// Sorting/Filtering
+            //var keySelector = query.SortColumn is not null && _sortableColumns.TryGetValue(query.SortColumn, out var selector) ? selector : category => category.Id;
 
-        var page = categories.Skip(Math.Max(query.Start, 0));
+            //categories = query.IsAscending ? categories.OrderBy(keySelector) : categories.OrderByDescending(keySelector);
 
-        if (query.Length > 0)
-        {
-            page = page.Take(query.Length);
-        }
+            //// Paged Result Model
+            //var totalDisplayRecords = await categories.CountAsync(cancellationToken);
 
-        return new PagedResultModel<ProductCategory>
-        {
-            Items = await page.ToListAsync(cancellationToken),
-            TotalRecords = totalRecords,
-            TotalDisplayRecords = totalDisplayRecords
-        };
+            //var page = categories.Skip(Math.Max(query.Start, 0));
+
+            //if (query.Length > 0)
+            //{
+            //    page = page.Take(query.Length);
+            //}
+
+            //return new PagedResultModel<ProductCategory>
+            //{
+            //    Items = await page.ToListAsync(cancellationToken),
+            //    TotalRecords = totalRecords,
+            //    TotalDisplayRecords = totalDisplayRecords
+            //};
+        */
+
     }
 
-    public Task<bool> HasActiveProductsAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public async Task<bool> HasActiveProductsAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await Context.Products.AnyAsync(
+          product => product.ProductCategoryId == id && product.ProductStatusId != (int)ProductStatusEnum.Deleted,
+          cancellationToken);
+    }
 }

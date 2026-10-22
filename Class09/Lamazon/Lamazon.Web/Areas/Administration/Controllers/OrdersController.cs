@@ -25,8 +25,32 @@ public class OrdersController : AdminBaseController
         DataTableRequestViewModel request,
         CancellationToken cancellationToken)
     {
-        //var pagedResult = await _ordersService.
-
-        return Json(null);
+        var pagedResult = await _ordersService.GetFilteredAsync(request, cancellationToken);
+        return Json(pagedResult.ToDataTableResponse(request.Draw));
     }
+
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var orderViewModel = await _ordersService.GetByIdAsync(id, cancellationToken);
+        return View(orderViewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Accept(int id, CancellationToken cancellationToken)
+    {
+        // Accept the order
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Reject(int id, CancellationToken cancellationToken)
+    {
+        // Reject the order
+
+        return RedirectToAction(nameof(Index));
+    }
+
 }

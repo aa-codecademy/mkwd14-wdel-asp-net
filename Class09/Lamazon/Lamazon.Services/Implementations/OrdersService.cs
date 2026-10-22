@@ -3,6 +3,7 @@ using Lamazon.Domain.Entities;
 using Lamazon.Domain.Enums;
 using Lamazon.Domain.Exceptions;
 using Lamazon.Services.Abstractions;
+using Lamazon.Services.Extensions;
 using Lamazon.ViewModels.DataTable;
 using Lamazon.ViewModels.Models;
 using MapsterMapper;
@@ -113,11 +114,27 @@ public class OrdersService : IOrdersService
         };
     }
 
-    public Task<OrderViewModel> GetByIdAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public async Task<OrderViewModel> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var order = await FindOrderAsync(id, cancellationToken);
+        return _mapper.Map<OrderViewModel>(order);
+    }
 
-    public Task<PagedResultViewModel<OrderViewModel>> GetFilteredAsync(DataTableRequestViewModel request, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public async Task<PagedResultViewModel<OrderViewModel>> GetFilteredAsync(
+        DataTableRequestViewModel request,
+        CancellationToken cancellationToken = default)
+    {
+        var pagedResult = await _ordersRepository.GetFilteredAsync(request.ToPagedQuery(), cancellationToken);
+        return _mapper.Map<PagedResultViewModel<OrderViewModel>>(pagedResult);
+    }
 
     public Task AcceptAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
     public Task RejectAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+
+    private async Task<Order> FindOrderAsync(int id, CancellationToken cancellationToken)
+    {
+        return await _ordersRepository.GetByIdAsync(id, cancellationToken)
+            ?? throw new NotFoundException(nameof(Order), id);
+    }
 }

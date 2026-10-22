@@ -1,5 +1,5 @@
 @model OrderViewModel
-
+@* The model is only used for the column titles (DisplayNameFor); the rows come from GetOrders as JSON *@
 
 <div class="card mb-4">
     <div class="card-body">
@@ -30,16 +30,16 @@
     </div>
 </div>
 
-                    
 @section Scripts {
     <script>
         var ordersTable = new DataTable('#ordersTable', {
+            // Newest orders first (column 0, descending)
             order: [[0, 'desc']],
             ajax: {
                 url: '@Url.Action("GetOrders")',
                 type: 'POST',
                 data: function (data) {
-                    data.search.value = $("#inputSearch").val();
+                    data.search.value = $('#inputSearch').val();
                 }
             },
             columns: [
@@ -51,6 +51,7 @@
                     className: 'text-center',
                     orderable: false,
                     render: function (url) {
+                        // No location for this order (the geo-location API didn't answer): show nothing
                         return url ? '<img class="order-country-flag" src="' + url + '" alt="" />' : '';
                     }
                 },
@@ -65,7 +66,7 @@
                     }
                 }
             ]
-        })
+        });
 
         bindTableSearch(ordersTable);
     </script>
