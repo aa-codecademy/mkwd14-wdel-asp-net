@@ -2,6 +2,8 @@ using Lamazon.DataAccess.Repositories.Abstractions;
 using Lamazon.Domain.Entities;
 using Lamazon.Domain.Exceptions;
 using Lamazon.Services.Abstractions;
+using Lamazon.Services.Extensions;
+using Lamazon.ViewModels.DataTable;
 using Lamazon.ViewModels.Models;
 using MapsterMapper;
 
@@ -37,5 +39,15 @@ public class ProductCategoriesService : IProductCategoriesService
         }
         ProductCategoryViewModel productCategoryViewModel = _mapper.Map<ProductCategoryViewModel>(category);
         return productCategoryViewModel;
+    }
+
+    public async Task<PagedResultViewModel<ProductCategoryViewModel>> GetFilteredAsync(
+        DataTableRequestViewModel request,
+        CancellationToken cancellationToken = default)
+    {
+        var pagedQueryModel = request.ToPagedQuery();
+        var pagedResult = await _productCategoriesRepository.GetFilteredAsync(pagedQueryModel, cancellationToken);
+        var result = _mapper.Map<PagedResultViewModel<ProductCategoryViewModel>>(pagedResult);
+        return result;
     }
 }
