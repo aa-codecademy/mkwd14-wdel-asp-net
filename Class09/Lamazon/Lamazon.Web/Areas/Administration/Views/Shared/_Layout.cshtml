@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.PageName - Lamazon CMS</title>
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    @* Material Dashboard brings its own Bootstrap 4 (CSS and JS): the CMS doesn't load the shop's Bootstrap 5 *@
+    <link rel="stylesheet" href="~/lib/material-dashboard/assets/css/material-dashboard.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="~/lib/notyf/notyf.min.css" />
+    <link rel="stylesheet" href="~/css/admin-site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="wrapper">
+        <partial name="_Sidebar" />
+
+        <div class="main-panel">
+            <partial name="_Navbar" />
+
+            <div class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <partial name="_Footer" />
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/material-dashboard/assets/js/core/popper.min.js"></script>
+    <script src="~/lib/material-dashboard/assets/js/core/bootstrap-material-design.min.js"></script>
+    <script src="~/lib/material-dashboard/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/lib/material-dashboard/assets/js/material-dashboard.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.min.js"></script>
+    <script src="~/lib/notyf/notyf.min.js"></script>
+    @* The same partial as the shop: Views/Shared is searched after Areas/Administration/Views/Shared *@
+    <partial name="_Notification" />
+    <script src="~/js/admin-site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
