@@ -1,0 +1,16 @@
+@model ProductCategoryViewModel
+
+<form asp-action="Create" method="post">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">New product category</h4>
+        </div>
+        <div class="card-body">
+            <partial name="_ProductCategoryForm" model="Model" />
+        </div>
+        <div class="card-footer justify-content-end">
+            <a class="btn btn-default" asp-action="Index">Cancel</a>
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,19 @@
+@model ProductCategoryViewModel
+
+<form asp-action="Edit" method="post">
+    @* The id travels in a hidden field, so the POST knows which category to change *@
+    <input type="hidden" asp-for="Id" />
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Edit product category</h4>
+        </div>
+        <div class="card-body">
+            <partial name="_ProductCategoryForm" model="Model" />
+        </div>
+        <div class="card-footer justify-content-end">
+            <a class="btn btn-default" asp-action="Index">Cancel</a>
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </div>
+</form>

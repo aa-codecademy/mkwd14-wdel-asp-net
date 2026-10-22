@@ -1,0 +1,18 @@
+@model ProductCategoryViewModel
+
+@* This page IS the "are you sure?" step: the form posts to Delete (DeleteConfirmed in the controller) *@
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Delete product category</h4>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete the category <strong>@Model.Name</strong>?</p>
+            <p class="text-muted">A category that still has products can't be deleted.</p>
+        </div>
+        <div class="card-footer justify-content-end">
+            <a class="btn btn-default" asp-action="Index">Cancel</a>
+            <button class="btn btn-danger" type="submit">Delete</button>
+        </div>
+    </div>
+</form>
