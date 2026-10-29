@@ -1,0 +1,82 @@
+@model ProductViewModel
+@* The model is only used for the column titles (DisplayNameFor); the rows come from GetProducts as JSON *@
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <a class="btn btn-success btn-add-new" asp-action="Create" title="New product"><i class="material-icons">add</i></a>
+
+            <div class="form-inline">
+                <select id="categoryFilter" asp-items="(SelectList)ViewBag.ProductCategoryList" class="form-control ddl-search mr-2">
+                    <option value="">All categories</option>
+                </select>
+                <input id="inputSearch" type="search" class="form-control txt-search" placeholder="Search products" />
+                <button id="btnSearch" class="btn btn-search btn-info" type="button"><i class="material-icons">search</i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table id="productsTable" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.ProductCategoryName)</th>
+                    <th class="text-right">@Html.DisplayNameFor(model => model.Price)</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var productsTable = new DataTable('#productsTable', {
+            ajax: {
+                url: '@Url.Action("GetProducts")',
+                type: 'POST',
+                data: function (data) {
+                    data.search.value = $('#inputSearch').val();
+                    // An extra filter: bound to ProductsDataTableRequestViewModel.CategoryId
+                    data.categoryId = $('#categoryFilter').val();
+                }
+            },
+            columns: [
+                {
+                    data: 'name',
+                    name: 'Name',
+                    render: DataTable.render.text()
+                },
+                {
+                    data: 'productCategoryName',
+                    name: 'ProductCategory.Name',
+                    render: DataTable.render.text()
+                },
+                {
+                    data: 'price',
+                    name: 'Price',
+                    className: 'text-right',
+                    render: DataTable.render.number(',', '.', 2, '$')
+                },
+                {
+                    data: 'id',
+                    className: 'column-actions',
+                    orderable: false,
+                    render: function (id) {
+                        return actionLink('@Url.Action("Edit")/' + id, 'edit', 'text-warning') +
+                            actionLink('@Url.Action("Delete")/' + id, 'delete', 'text-danger');
+                    }
+                }
+            ]
+        });
+
+        bindTableSearch(productsTable);
+
+        $('#categoryFilter').on('change', function () {
+            productsTable.ajax.reload();
+        });
+    </script>
+}

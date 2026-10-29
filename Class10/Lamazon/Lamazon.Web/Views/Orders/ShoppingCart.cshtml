@@ -1,0 +1,47 @@
+@model List<OrderLineItemViewModel>
+@{
+    ViewData["Title"] = "Shopping cart";
+}
+
+<h2>Shopping cart</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        @foreach (OrderLineItemViewModel lineItem in Model)
+        {
+            <div class="row order-item">
+                <div class="col-md-2">
+                    <img class="order-item-image" src="@lineItem.ProductImageUrl" alt="@lineItem.ProductName" />
+                </div>
+                <div class="col-md-6">
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@lineItem.ProductId">
+                        <p class="order-item-name">@lineItem.ProductName</p>
+                    </a>
+                    <p class="order-item-price">Price: $@lineItem.ProductPrice.ToString("N2")</p>
+                    <p class="order-item-description">@lineItem.ProductDescription</p>
+                    @* Homework: the Remove button *@
+                </div>
+                <div class="col-md-2 text-center">
+                    <p class="order-label">Qty</p>
+                    <p class="order-value">@lineItem.Quantity</p>
+                </div>
+                <div class="col-md-2 text-end">
+                    <p class="order-label">Total</p>
+                    <p class="order-value">$@lineItem.TotalPrice.ToString("N2")</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4 text-center ps-5">
+        <p class="order-label">Total: $@Model.Sum(lineItem => lineItem.TotalPrice).ToString("N2")</p>
+
+        @*
+            The form sends NO prices, only the anti-forgery token (added by the form tag helper).
+            The server reads the products from the cart cookie and their prices from the database.
+        *@
+        <form asp-controller="Orders" asp-action="CreateOrder" method="post" class="mt-3">
+            <button class="btn btn-create-order btn-success" type="submit">Create order</button>
+        </form>
+    </div>
+</div>

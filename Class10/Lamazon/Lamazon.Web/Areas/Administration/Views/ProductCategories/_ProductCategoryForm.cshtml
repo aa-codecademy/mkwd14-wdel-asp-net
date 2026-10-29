@@ -1,0 +1,14 @@
+@model ProductCategoryViewModel
+@* The form fields, shared by Create and Edit *@
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group bmd-form-group">
+            <label asp-for="Name" class="bmd-label-floating"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+/* Styles for the CMS (Areas/Administration), on top of Material Dashboard */
+
+.hidden {
+    display: none !important;
+}
+
+.main-panel > .content {
+    padding: 10px;
+    padding-top: 0;
+}
+
+/* The active page in the sidebar (ActiveRouteTagHelper adds the "active" class) */
+.sidebar .nav li.active > a {
+    background-color: #634949;
+}
+
+/* Tables
+-------------------------------------------------- */
+.action-button {
+    margin-left: 20px;
+}
+
+.column-actions {
+    width: 100px;
+    text-align: right;
+}
+
+.btn-add-new,
+.btn-search {
+    padding: 10px;
+}
+
+.txt-search {
+    min-width: 180px;
+}
+
+.ddl-search {
+    padding: 7px 10px;
+    min-width: 150px;
+}
+
+select.form-control {
+    height: 36px !important;
+}
+
+.dataTables_length {
+    padding-top: 3.5px;
+}
+
+.order-country-flag {
+    height: 24px;
+}
+
+.preview-table > thead > tr > th {
+    color: #999;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.preview-table > tbody > tr > td {
+    font-size: 14px;
+}
+
+/* Forms
+-------------------------------------------------- */
+.product-featured-checkbox {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-top: 7px;
+    margin-left: 2px;
+}
+
+.card-footer .btn + .btn,
+.card-footer .btn + form,
+.card-footer form + .btn {
+    margin-left: 10px;
+}

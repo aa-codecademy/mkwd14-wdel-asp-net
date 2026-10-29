@@ -1,0 +1,73 @@
+@model OrderViewModel
+@* The model is only used for the column titles (DisplayNameFor); the rows come from GetOrders as JSON *@
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-end">
+            <div class="form-inline">
+                <input id="inputSearch" type="search" class="form-control txt-search" placeholder="Order number or customer" />
+                <button id="btnSearch" class="btn btn-search btn-info" type="button"><i class="material-icons">search</i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table id="ordersTable" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.OrderNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.User)</th>
+                    <th>@Html.DisplayNameFor(model => model.CountryCode)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.CountryFlagUrl)</th>
+                    <th class="text-right">@Html.DisplayNameFor(model => model.TotalAmount)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.OrderStatus)</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var ordersTable = new DataTable('#ordersTable', {
+            // Newest orders first (column 0, descending)
+            order: [[0, 'desc']],
+            ajax: {
+                url: '@Url.Action("GetOrders")',
+                type: 'POST',
+                data: function (data) {
+                    data.search.value = $('#inputSearch').val();
+                }
+            },
+            columns: [
+                { data: 'orderNumber', name: 'OrderNumber' },
+                { data: 'user.fullName', name: 'User.FullName', render: DataTable.render.text() },
+                { data: 'countryCode', name: 'CountryCode', defaultContent: '' },
+                {
+                    data: 'countryFlagUrl',
+                    className: 'text-center',
+                    orderable: false,
+                    render: function (url) {
+                        // No location for this order (the geo-location API didn't answer): show nothing
+                        return url ? '<img class="order-country-flag" src="' + url + '" alt="" />' : '';
+                    }
+                },
+                { data: 'totalAmount', name: 'TotalAmount', className: 'text-right', render: DataTable.render.number(',', '.', 2, '$') },
+                { data: 'orderStatusName', name: 'OrderStatus', className: 'text-center' },
+                {
+                    data: 'id',
+                    className: 'column-actions',
+                    orderable: false,
+                    render: function (id) {
+                        return actionLink('@Url.Action("Details")/' + id, 'visibility', 'text-info');
+                    }
+                }
+            ]
+        });
+
+        bindTableSearch(ordersTable);
+    </script>
+}
