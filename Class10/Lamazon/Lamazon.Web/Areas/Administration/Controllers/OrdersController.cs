@@ -39,8 +39,8 @@ public class OrdersController : AdminBaseController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Accept(int id, CancellationToken cancellationToken)
     {
-        // Accept the order
-
+        await _ordersService.AcceptAsync(id, cancellationToken);
+        AddSuccessNotification("The order was accepted and its invoice was created.");
         return RedirectToAction(nameof(Index));
     }
 

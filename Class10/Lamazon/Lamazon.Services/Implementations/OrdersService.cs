@@ -1,3 +1,4 @@
+using System.Transactions;
 using Lamazon.DataAccess.Repositories.Abstractions;
 using Lamazon.Domain.Entities;
 using Lamazon.Domain.Enums;
@@ -14,6 +15,7 @@ public class OrdersService : IOrdersService
 {
     private readonly IOrdersRepository _ordersRepository;
     private readonly IProductsRepository _productsRepository;
+    private readonly IInvoicesRepository _invoicesRepository;
     private readonly IMapper _mapper;
     private readonly IGeoTrackerService _geoTrackerService;
 
@@ -21,12 +23,14 @@ public class OrdersService : IOrdersService
         IOrdersRepository ordersRepository,
         IProductsRepository productsRepository,
         IMapper mapper,
-        IGeoTrackerService geoTrackerService)
+        IGeoTrackerService geoTrackerService,
+        IInvoicesRepository invoicesRepository)
     {
         _ordersRepository = ordersRepository;
         _productsRepository = productsRepository;
         _mapper = mapper;
         _geoTrackerService = geoTrackerService;
+        _invoicesRepository = invoicesRepository;
     }
 
     public async Task<List<OrderLineItemViewModel>> GetCartLineItemsAsync(
@@ -128,7 +132,28 @@ public class OrdersService : IOrdersService
         return _mapper.Map<PagedResultViewModel<OrderViewModel>>(pagedResult);
     }
 
-    public Task AcceptAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public async Task AcceptAsync(int id, CancellationToken cancellationToken = default)
+    {
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        // 1) Update Order Status
+        var order = await FindOrderAsync(id, cancellationToken);
+        if (order.OrderStatusId != (int)OrderStatusEnum.Pending)
+        {
+            var status = (OrderStatusEnum)order.OrderStatusId;
+            throw new BusinessRuleException($"Only pending orders can be accepted. Order {order.OrderNumber} is {status}.");
+        }
+        order.OrderStatusId = (int)OrderStatusEnum.Accepted;
+        await _ordersRepository.UpdateAsync(order, cancellationToken);
+
+        // 2) Create Invoice
+        var invoice = _mapper.Map<Invoice>(order);
+        var maxId = await _invoicesRepository.GetMaxIdAsync(cancellationToken);
+        invoice.InvoiceNumber = $"{maxId + 1}/{invoice.InvoiceDate.ToLocalTime().Year}";
+        await _invoicesRepository.AddAsync(invoice, cancellationToken);
+
+        scope.Complete();
+    }
 
     public Task RejectAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 

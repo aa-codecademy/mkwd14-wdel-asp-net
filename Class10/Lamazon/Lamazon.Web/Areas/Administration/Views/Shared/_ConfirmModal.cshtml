@@ -1,0 +1,25 @@
+@model ConfirmModalViewModel
+
+
+<div class="modal fade" id="@Model.ModalId" tabindex="-1" role="dialog" aria-labelledby="@(Model.ModalId)Title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="@Model.Action" asp-route-id="@Model.EntityId" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="@(Model.ModalId)Title">@Model.Title</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Model.Message
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn @Model.ConfirmCssClass">@Model.ConfirmText</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

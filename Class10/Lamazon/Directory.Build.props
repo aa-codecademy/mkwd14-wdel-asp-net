@@ -1,0 +1,33 @@
+<!--
+  MSBuild imports this file automatically into EVERY project in this folder and its sub-folders.
+  Shared settings live here, so each .csproj only lists what is special about that project.
+-->
+<Project>
+
+  <PropertyGroup>
+    <!-- The same .NET version and C# features for every project -->
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Code analysis: Microsoft's recommended rules, plus the code style rules from .editorconfig on every build -->
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Needed so unused usings (IDE0005) are reported on build.
+         CS1591 ("missing XML comment") is switched off: comments are welcome, not required. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- Warn about known security vulnerabilities in direct AND transitive NuGet packages -->
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+  </PropertyGroup>
+
+  <!-- Release builds (and CI) are strict: every warning fails the build.
+       Debug builds only show warnings, so nobody is blocked while learning. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

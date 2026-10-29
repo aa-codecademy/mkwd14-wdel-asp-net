@@ -81,10 +81,40 @@
         @* Only a pending order can be accepted or rejected (the service checks it too) *@
         @if (Model.OrderStatus == OrderStatusEnum.Pending)
         {
-            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#rejectModal">Reject</button>
-            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#acceptModal">Accept</button>
+            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#rejectModal">
+                Reject
+            </button>
+            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#acceptModal">
+                Accept
+            </button>
         }
     </div>
 </div>
 
-@* TODO: Accept/Reject Confirmation Modal *@
+@if (Model.OrderStatus == OrderStatusEnum.Pending)
+{
+    var rejectModalVM = new ConfirmModalViewModel
+    {
+        ModalId = "rejectModal",
+        Title = "Reject order",
+        Message = $"Are you sure you want to reject order {Model.OrderNumber}?",
+        Action = "Reject",
+        EntityId = Model.Id,
+        ConfirmText = "Reject",
+        ConfirmCssClass = "btn-danger"
+    };
+
+    var acceptModalVM = new ConfirmModalViewModel
+    {
+        ModalId = "acceptModal",
+        Title = "Accept order",
+        Message = $"Accept order {Model.OrderNumber}? Its invoice will be created.",
+        Action = "Accept",
+        EntityId = Model.Id,
+        ConfirmText = "Accept",
+        ConfirmCssClass = "btn-success"
+    };
+
+    <partial name="_ConfirmModal" model="rejectModalVM" />
+    <partial name="_ConfirmModal" model="acceptModalVM" />
+}
