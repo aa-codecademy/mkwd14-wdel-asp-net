@@ -138,11 +138,7 @@ public class OrdersService : IOrdersService
 
         // 1) Update Order Status
         var order = await FindOrderAsync(id, cancellationToken);
-        if (order.OrderStatusId != (int)OrderStatusEnum.Pending)
-        {
-            var status = (OrderStatusEnum)order.OrderStatusId;
-            throw new BusinessRuleException($"Only pending orders can be accepted. Order {order.OrderNumber} is {status}.");
-        }
+        EnsureOrderIsPending(order, "accepted");
         order.OrderStatusId = (int)OrderStatusEnum.Accepted;
         await _ordersRepository.UpdateAsync(order, cancellationToken);
 
@@ -155,11 +151,27 @@ public class OrdersService : IOrdersService
         scope.Complete();
     }
 
-    public Task RejectAsync(int id, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public async Task RejectAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var order = await FindOrderAsync(id, cancellationToken);
+        EnsureOrderIsPending(order, "rejected");
+
+        order.OrderStatusId = (int)OrderStatusEnum.Rejected;
+        await _ordersRepository.UpdateAsync(order, cancellationToken);
+    }
 
     private async Task<Order> FindOrderAsync(int id, CancellationToken cancellationToken)
     {
         return await _ordersRepository.GetByIdAsync(id, cancellationToken)
             ?? throw new NotFoundException(nameof(Order), id);
+    }
+
+    private static void EnsureOrderIsPending(Order order, string action)
+    {
+        if (order.OrderStatusId != (int)OrderStatusEnum.Pending)
+        {
+            var status = (OrderStatusEnum)order.OrderStatusId;
+            throw new BusinessRuleException($"Only pending orders can be {action}. Order {order.OrderNumber} is {status}.");
+        }
     }
 }

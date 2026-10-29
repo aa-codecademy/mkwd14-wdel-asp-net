@@ -20,9 +20,11 @@
     margin-left: 20px;
 }
 
+/* nowrap: the icons stay on one line (DataTables' CSS counts the padding in the width) */
 .column-actions {
     width: 100px;
     text-align: right;
+    white-space: nowrap;
 }
 
 .btn-add-new,

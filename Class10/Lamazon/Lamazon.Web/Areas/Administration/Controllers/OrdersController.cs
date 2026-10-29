@@ -48,8 +48,8 @@ public class OrdersController : AdminBaseController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Reject(int id, CancellationToken cancellationToken)
     {
-        // Reject the order
-
+        await _ordersService.RejectAsync(id, cancellationToken);
+        AddSuccessNotification("The order was rejected.");
         return RedirectToAction(nameof(Index));
     }
 
